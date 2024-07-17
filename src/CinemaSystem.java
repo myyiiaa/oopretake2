@@ -75,4 +75,26 @@ public class CinemaSystem {
         }
         System.out.println("Ticket not found.");
     }
+    public void buyTicket(String userName, int movieId, String date, String time) {
+        User user = findUserByName(userName);
+        Movie movie = findMovieById(movieId);
+
+        if (user != null && movie != null) {
+            double price = 10.0; // Assume a fixed price for simplicity
+            double discountedPrice = user.getDiscountedPrice(price);
+
+            if (user.getBalance() >= discountedPrice) {
+                user.setBalance(user.getBalance() - discountedPrice);
+                Ticket ticket = new Ticket(nextTicketId++, movie.getMovieName(), date, time, discountedPrice);
+                user.addTicket(ticket);
+                tickets.add(ticket);
+                System.out.println("Ticket purchased successfully!");
+            } else {
+                System.out.println("Insufficient balance to buy the ticket.");
+            }
+        } else {
+            System.out.println("User or movie not found.");
+        }
+    }
+
 }
